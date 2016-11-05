@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+    <ScrollView 
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content">
+ <LinearLayout 
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content"
+     android:orientation="vertical"
+     android:layout_marginTop="5dp">
+     
+<TableLayout
+            android:id="@+id/feedstock_table_save"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:scrollbars="vertical"
+            android:layout_margin="5dp"
+            android:shrinkColumns="*"
+            android:stretchColumns="*"
+            android:layout_marginBottom="10dp"
+            android:textColor="@android:color/white">
+        </TableLayout>
+        </LinearLayout>
+</ScrollView>
+    <LinearLayout  
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:orientation="horizontal">
+ <Button 
+          android:layout_width="0dp"
+          android:layout_height="36dp"
+          android:layout_weight="1"
+          android:text="Remove Stock"
+          android:id="@+id/stock_delete"
+          android:layout_margin="5dp"
+          android:layout_gravity="center"
+          android:textColor="@android:color/white"
+          android:background="@drawable/blue_button"/>
+  
+ </LinearLayout>
+
+<View
+      android:layout_width="match_parent"
+      android:layout_height="0.25dp"
+      android:background="#e1dad5"></View>
+  
+ 
+ 
+</LinearLayout>

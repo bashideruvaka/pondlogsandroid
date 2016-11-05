@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#e5e2e2" >
+
+    <fragment
+        android:id="@+id/map1"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        class="com.google.android.gms.maps.SupportMapFragment"/>
+         <LinearLayout
+        android:id="@+id/bottom"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_gravity="right"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:layout_margin="3dp"
+                android:background="#e5e2e2"
+                android:gravity="left"
+                android:orientation="horizontal" >
+             
+                <Button
+                    android:id="@+id/btnimg_clear_canvas1"
+                    android:layout_width="0dp"
+                    android:layout_height="36dp"
+                    android:layout_weight="1"
+                    android:layout_margin="3dp" 
+                    android:text="Clear"
+                    android:textSize="13sp"
+                    android:background="@drawable/roundededitcorner"/>
+
+                 
+                <Button
+                    android:id="@+id/btnimg_start_drawing1"
+                    android:layout_width="0dp"
+                    android:layout_height="36dp"
+                    android:layout_weight="1"
+                    android:textSize="13sp"
+                    android:text="Add Pond"
+                    android:layout_margin="3dp" 
+                    android:background="@drawable/roundededitcorner"  
+                     />
+                              
+
+                <Button
+                    android:id="@+id/btnimg_savedraw1"
+                    android:layout_width="0dp"
+                    android:layout_height="36dp"
+                    android:layout_weight="1"
+                    android:layout_margin="3dp" 
+                    android:textSize="13sp"
+                    android:text="Save"
+                    android:background="@drawable/roundededitcorner" 
+                     />
+                
+            </LinearLayout>
+            </LinearLayout>
+            </LinearLayout>  
+</RelativeLayout>

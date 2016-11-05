@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:orientation="horizontal" >
+    <TextView
+         android:layout_width="0dp"
+         android:layout_height="36dp"
+         android:gravity="left"
+         android:textSize="15sp"
+         android:text="Date"
+         android:textColor="@android:color/black"
+         android:layout_weight="1"/>
+ <LinearLayout  
+    android:layout_width="0dp"
+    android:layout_height="36dp"
+    android:background="@drawable/roundededitcorner"
+    android:layout_weight="1"
+    android:orientation="horizontal">
+<TextView
+         android:id="@+id/dialogdate"
+         android:layout_width="0dp"
+         android:layout_height="30dp"
+         android:gravity="center"
+         android:textSize="15sp"
+         android:textColor="@android:color/black"
+         android:layout_weight="1"/>
+
+<ImageButton 
+          android:id="@+id/dailogCalendar"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:layout_marginRight="10dp"
+          android:contentDescription="true"
+          android:background="@drawable/calendar"/>
+</LinearLayout>
+ </LinearLayout> 
+<LinearLayout  
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:orientation="horizontal">
+  <TextView
+        
+         android:layout_width="0dp"
+         android:layout_height="36dp"
+         android:gravity="left"
+         android:textSize="15sp"
+         android:text="No.of.Bags"
+         android:textColor="@android:color/black"
+         android:layout_weight="1"/>
+ <EditText
+         android:id="@+id/noofbagsEdit"
+         android:layout_width="0dp"
+         android:layout_height="36dp"
+         android:gravity="center"
+         android:textSize="15sp"
+         android:layout_margin="3dp"
+         android:inputType="number"
+         android:textColor="@android:color/black"
+         android:background="@drawable/roundededitcorner"
+         android:layout_weight="1"/>
+  </LinearLayout>
+   
+   
+<LinearLayout  
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:orientation="horizontal">
+     <TextView
+         android:layout_width="0dp"
+         android:layout_height="36dp"
+         android:gravity="left"
+         android:textSize="15sp"
+         android:text="Bag Weight(Kg)"
+        
+         android:textColor="@android:color/black"
+         android:layout_weight="1"/>
+      <EditText
+         android:id="@+id/bagweightEdit"
+         android:layout_width="0dp"
+         android:layout_height="36dp"
+         android:gravity="center"
+         android:textSize="15sp"
+         android:layout_margin="3dp"
+          android:inputType="numberDecimal"
+         android:textColor="@android:color/black"
+         android:background="@drawable/roundededitcorner"
+         android:layout_weight="1"/>
+     </LinearLayout>
+<LinearLayout  
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:orientation="horizontal">
+      <TextView
+         android:layout_width="0dp"
+         android:layout_height="36dp"
+         android:gravity="left"
+         android:textSize="15sp"
+         android:text="Total Purchased(Kg)"
+         android:textColor="@android:color/black"
+         android:layout_weight="1"/>
+ <EditText
+         android:id="@+id/totalpurchasedEdit"
+         android:layout_width="0dp"
+         android:layout_height="36dp"
+         android:gravity="center"
+         android:textSize="15sp"
+         android:layout_margin="3dp"
+         android:textColor="@android:color/black"
+         android:editable="false"
+         android:background="@drawable/roundededitcorner"
+         android:layout_weight="1"/>
+ </LinearLayout>
+  
+ <LinearLayout  
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:orientation="horizontal">
+   <TextView
+         android:layout_width="0dp"
+         android:layout_height="36dp"
+         android:gravity="left"
+         android:textSize="15sp"
+         android:text="Total Stock(Kg)"
+         android:textColor="@android:color/black"
+         android:layout_weight="1"/>
+ <EditText
+         android:id="@+id/totalstockEdit"
+         android:layout_width="0dp"
+         android:layout_height="36dp"
+         android:gravity="center"
+         android:textSize="15sp"
+         android:layout_margin="3dp"
+         android:editable="false"
+         android:textColor="@android:color/black"
+         android:background="@drawable/roundededitcorner"
+         android:layout_weight="1"/>
+ </LinearLayout>
+ <LinearLayout  
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:orientation="horizontal">
+   <TextView
+         android:layout_width="0dp"
+         android:layout_height="36dp"
+         android:gravity="left"
+         android:textSize="15sp"
+         android:text="Vendor"
+         android:textColor="@android:color/black"
+         android:layout_weight="1"/>
+   <LinearLayout  
+         android:layout_width="0dp"
+         android:layout_height="36dp"
+         android:layout_weight="1"
+         android:layout_margin="3dp"
+         android:background="@drawable/roundededitcorner">
+  <Spinner
+         android:id="@+id/addfeedstockSpinnerEdit"
+         android:layout_width="0dp"
+         android:layout_height="36dp"
+         android:layout_weight="1"
+        
+          />
+  </LinearLayout>
+ </LinearLayout>
+ <LinearLayout  
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:orientation="horizontal">
+ <Button 
+          android:layout_width="0dp"
+          android:layout_height="36dp"
+          android:layout_weight="1"
+          android:text="Cancel"
+          android:id="@+id/feedstockcancelEdit"
+          android:layout_margin="3dp"
+          android:layout_gravity="center"
+          android:textColor="@android:color/white"
+          android:background="@drawable/blue_button"/>
+ <Button 
+          android:layout_width="0dp"
+          android:layout_height="36dp"
+          android:layout_weight="1"
+          android:text="Save"
+          android:id="@+id/feedstocksaveEdit"
+          android:layout_margin="3dp"
+          android:layout_gravity="center"
+          android:textColor="@android:color/white"
+          android:background="@drawable/blue_button"/>
+ </LinearLayout>
+</LinearLayout>

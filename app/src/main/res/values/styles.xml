@@ -1,0 +1,97 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--
+        Base application theme, dependent on API level. This theme is replaced
+        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+    -->
+     <!-- Application theme. -->
+    <style name="AppTheme" parent="AppBaseTheme">
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+          
+    </style>
+    
+    <style name="AppBaseTheme" parent="@android:style/Theme.Holo.Light">
+            <item name="android:actionBarStyle">@style/AppTheme.ActionBarStyle</item>
+        
+    </style>
+    
+     <style name="MyActionBar"
+           parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
+        <item name="android:background">@drawable/greenbutton</item>
+      
+       
+    </style>
+    
+    
+      <!-- Application customizetheme. -->
+    <!-- <style name="MyTheme" parent="@android:style/Theme.Holo.Light">
+    <item name="android:actionBarStyle">@style/MyTheme.ActionBarStyle</item>
+    
+    </style>
+    -->
+   
+   
+    <!-- Application customizetheme ActionBarStyle -->
+    <style name="AppTheme.ActionBarStyle" parent="@android:style/Widget.Holo.Light.ActionBar">
+    <item name="android:titleTextStyle">@style/AppTheme.ActionBar.TitleTextStyle</item>
+    <item name="android:background">#65c9f2</item>
+    
+    </style>
+     <!-- Application customizetheme TitleTextStyle -->
+    <style name="AppTheme.ActionBar.TitleTextStyle" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
+    <item name="android:textColor">#FFFFFF</item>
+    <item name="android:textStyle">bold</item>
+     <item name="android:gravity">center</item>
+     
+    </style>
+    <!-- Application customizetheme Subtitle -->
+    <style name="AppTheme.ActionBar.Subtitle" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Subtitle">
+    <item name="android:textColor">#FFFFFF</item>
+    </style>
+
+  <!-- Application customizetheme ButtonTextdisplay -->  
+        <style name="ButtonTextdisplay">
+	    <item name="android:layout_width">fill_parent</item>
+	    <item name="android:layout_height">wrap_content</item>
+	    <item name="android:textColor">#ffffff</item>
+	    <item name="android:textSize">45sp</item>
+	    <item name="android:textStyle">normal</item>
+	    <item name="android:shadowColor">#000000</item>
+	    <item name="android:shadowDx">1</item>
+	    <item name="android:shadowDy">1</item>
+	    <item name="android:shadowRadius">2</item>
+	    <item name="android:singleLine">false</item>
+	    </style>
+	    
+   <!-- Application customizetheme ButtonText -->  
+<style name="ButtonText">
+	    <item name="android:layout_width">fill_parent</item>
+	    <item name="android:layout_height">wrap_content</item>
+	    <item name="android:textColor">#14648d</item>
+	    <item name="android:textSize">36sp</item>
+	    <item name="android:textStyle">bold</item>
+	    <item name="android:shadowDx">1</item>
+	    <item name="android:shadowDy">1</item>
+	    <item name="android:shadowRadius">2</item>
+	    <item name="android:singleLine">false</item>
+	    </style>
+<!-- Application customizetheme progress_bar_style -->     
+    <style name="progress_bar_style">
+    <item name="android:windowFrame">@null</item>
+    <item name="android:windowBackground">@android:color/transparent</item>
+    <item name="android:windowIsFloating">true</item>
+    <item name="android:windowContentOverlay">@null</item>
+    <item name="android:windowTitleStyle">@null</item>
+    <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+    <item name="android:windowSoftInputMode">stateUnspecified|adjustPan</item>
+    <item name="android:backgroundDimEnabled">false</item>
+    <item name="android:background">@android:color/transparent</item>
+</style>
+  <style name="ToolbarSpinnerTheme" parent="Theme.AppCompat">
+    <item name="android:spinnerItemStyle">@style/TextAppearanceSpinnerItem</item>
+   </style>
+
+    <style name="TextAppearanceSpinnerItem">
+    <item name="android:textColor">#FFFFFF</item>
+   </style>
+</resources>
