@@ -2,17 +2,22 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#e5e2e2" >
+    android:background="#FFFFFF">
 
     <fragment
-        android:id="@+id/map1"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        class="com.google.android.gms.maps.SupportMapFragment"/>
-         <LinearLayout
+        android:id="@+id/place_autocomplete_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
+        />
+
+
+
+    <LinearLayout
         android:id="@+id/bottom"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
+        android:background="#e5e2e2"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
@@ -30,43 +35,49 @@
                 android:layout_margin="3dp"
                 android:background="#e5e2e2"
                 android:gravity="left"
-                android:orientation="horizontal" >
-             
+                android:orientation="horizontal">
+
                 <Button
                     android:id="@+id/btnimg_clear_canvas1"
                     android:layout_width="0dp"
                     android:layout_height="36dp"
+                    android:layout_margin="3dp"
                     android:layout_weight="1"
-                    android:layout_margin="3dp" 
+                    android:background="@drawable/roundededitcorner"
                     android:text="Clear"
-                    android:textSize="13sp"
-                    android:background="@drawable/roundededitcorner"/>
+                    android:textSize="13sp" />
 
-                 
+
                 <Button
                     android:id="@+id/btnimg_start_drawing1"
                     android:layout_width="0dp"
                     android:layout_height="36dp"
+                    android:layout_margin="3dp"
                     android:layout_weight="1"
-                    android:textSize="13sp"
+                    android:background="@drawable/roundededitcorner"
                     android:text="Add Pond"
-                    android:layout_margin="3dp" 
-                    android:background="@drawable/roundededitcorner"  
-                     />
-                              
+                    android:textSize="13sp" />
+
 
                 <Button
                     android:id="@+id/btnimg_savedraw1"
                     android:layout_width="0dp"
                     android:layout_height="36dp"
+                    android:layout_margin="3dp"
                     android:layout_weight="1"
-                    android:layout_margin="3dp" 
-                    android:textSize="13sp"
+                    android:background="@drawable/roundededitcorner"
                     android:text="Save"
-                    android:background="@drawable/roundededitcorner" 
-                     />
-                
+                    android:textSize="13sp" />
+
             </LinearLayout>
-            </LinearLayout>
-            </LinearLayout>  
+        </LinearLayout>
+    </LinearLayout>
+
+    <fragment
+        android:id="@+id/map1"
+        android:layout_above="@id/bottom"
+        android:layout_below="@id/place_autocomplete_fragment"
+        class="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" />
 </RelativeLayout>

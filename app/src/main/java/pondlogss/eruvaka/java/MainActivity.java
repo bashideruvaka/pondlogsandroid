@@ -7,9 +7,9 @@ import pondlogss.eruvaka.R;
 import pondlogss.eruvaka.adapter.NavDrawerListAdapter;
 import pondlogss.eruvaka.model.NavDrawerItem;
 import android.app.ActionBar;
- 
- 
- 
+
+
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Application;
 import android.content.Context;
@@ -25,6 +25,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,7 +34,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends AppCompatActivity {
 	
 	private DrawerLayout mDrawerLayout;
 	private ListView mDrawerList;

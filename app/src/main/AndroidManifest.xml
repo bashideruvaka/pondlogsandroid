@@ -69,9 +69,12 @@
             android:screenOrientation="portrait"></activity>
 
 
-        <meta-data
+       <!-- <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyBfyIlmyblbCCblwifWlieqkq5G32IDXnI" />
+            android:value="AIzaSyBfyIlmyblbCCblwifWlieqkq5G32IDXnI" />-->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBfyIlmyblbCCblwifWlieqkq5G32IDXnI"/>
 
         <!-- AIzaSyBcEDUT_WWbLDzpPuEnhvXMSc4f842iAeU -->
         <!-- AIzaSyDtsUO2fY3WAGW78bUcJd3MohF8W_oW-h4 -->
