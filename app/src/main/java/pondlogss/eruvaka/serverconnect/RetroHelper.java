@@ -25,21 +25,12 @@ public class RetroHelper {
         String url = "http://52.77.24.190/PondLogs_new/mobile/" + serverUrl;
         Log.e("RetroHelper", "url : " + url);
         Retrofit retrofit;
-        if (headers != null) {
             OkHttpClient client = getRequestInterceptor(headers);
             retrofit = new Retrofit.Builder()
                     .baseUrl(url)
                     .addConverterFactory(GsonConverterFactory.create())
                     .client(client)
                     .build();
-        } else {
-            retrofit = new Retrofit.Builder()
-                    .baseUrl(url)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
-        }
-
-
         return retrofit;
     }
 
@@ -51,20 +42,21 @@ public class RetroHelper {
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
         httpClient.interceptors().add(logging);
 
-        httpClient.interceptors().add(new Interceptor() {
-            @Override
-            public Response intercept(Chain chain) throws IOException {
-
-                Request.Builder requestBuilder = chain.request().newBuilder();
-                Iterator<Map.Entry<String, String>> entrysList = headers.entrySet().iterator();
-                while (entrysList.hasNext()) {
-                    Map.Entry<String, String> entry = entrysList.next();
-                    requestBuilder.addHeader(entry.getKey(), entry.getValue()).build();
-                    System.out.println("Key = " + entry.getKey() + ", Value = " + entry.getValue());
+        if(headers!=null) {
+            httpClient.interceptors().add(new Interceptor() {
+                @Override
+                public Response intercept(Chain chain) throws IOException {
+                    Request.Builder requestBuilder = chain.request().newBuilder();
+                    Iterator<Map.Entry<String, String>> entrysList = headers.entrySet().iterator();
+                    while (entrysList.hasNext()) {
+                        Map.Entry<String, String> entry = entrysList.next();
+                        requestBuilder.addHeader(entry.getKey(), entry.getValue()).build();
+                        System.out.println("Key = " + entry.getKey() + ", Value = " + entry.getValue());
+                    }
+                    return chain.proceed(requestBuilder.build());
                 }
-                return chain.proceed(requestBuilder.build());
-            }
-        });
+            });
+        }
         return httpClient.build();
     }
 

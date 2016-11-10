@@ -276,7 +276,12 @@ public class LoginActivity extends ActionBarActivity {
         final String password = edtPassword.getText().toString().trim();
 
 
-        Call<JsonObject> call = util.getBaseClassService("", username, password).login();
+        JsonObject object =new JsonObject();
+        object.addProperty("username",username);
+        object.addProperty("password",password);
+
+
+        Call<JsonObject> call = util.getBaseClassService().login(object);
         util.showProgressDialog();
         call.enqueue(new Callback<JsonObject>() {
             @Override

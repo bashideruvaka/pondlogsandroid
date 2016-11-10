@@ -26,7 +26,7 @@ import retrofit2.http.Query;
 public interface ServiceHelper {
 
     @POST(UrlData.URL_LOGIN)
-    public Call<JsonObject> login();
+    public Call<JsonObject> login(@Body JsonObject obj);
 
     @Multipart
     @POST("register")
