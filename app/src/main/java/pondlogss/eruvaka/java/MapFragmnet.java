@@ -58,6 +58,7 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 
@@ -74,14 +75,15 @@ import android.widget.SearchView;
 import android.widget.Toast;
 import android.widget.SearchView.OnQueryTextListener;
 
-public class MapFragmnet extends Fragment implements OnMapClickListener, OnQueryTextListener, OnMapReadyCallback,PlaceSelectionListener {
+public class MapFragmnet extends Fragment implements OnMapClickListener, OnQueryTextListener, OnMapReadyCallback, PlaceSelectionListener {
     private static final String TAG = "MapFragmnet";
+    private static final int LOCATON_PERMISSION_CODE = 500;
     private GoogleMap googleMap;
     ArrayList<LatLng> latLang = new ArrayList<LatLng>();
     ArrayList<IGeoPoint> listPoints = new ArrayList<IGeoPoint>();
     boolean isGeometryClosed = false;
     Polygon polygon;
-    boolean isStartGeometry = false;
+    boolean isStartGeometry =false;
     private static LatLng fromPosition = null;
     private static LatLng toPosition = null;
     MarkerOptions markerOptions;
@@ -103,7 +105,7 @@ public class MapFragmnet extends Fragment implements OnMapClickListener, OnQuery
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        actvity=(Activity)context;
+        actvity = (Activity) context;
     }
 
     @Override
@@ -118,7 +120,7 @@ public class MapFragmnet extends Fragment implements OnMapClickListener, OnQuery
                 actvity.getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
         autocompleteFragment.setOnPlaceSelectedListener(this);
         autocompleteFragment.setHint("Search a Location");
-       // autocompleteFragment.setBoundsBias(BOUNDS_MOUNTAIN_VIEW);
+        // autocompleteFragment.setBoundsBias(BOUNDS_MOUNTAIN_VIEW);
 
 
         clear = (Button) Map.findViewById(R.id.btnimg_clear_canvas1);
@@ -305,16 +307,13 @@ public class MapFragmnet extends Fragment implements OnMapClickListener, OnQuery
 
     private void initilizeMap() {
         // TODO Auto-generated method stub
+        // check if map is created successfully or not
         if (googleMap == null) {
-            // check if map is created successfully or not
-            if (googleMap == null) {
-                Toast.makeText(getActivity(), "Sorry! unable to create maps", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
+            Toast.makeText(getActivity(), "Sorry! unable to create maps", Toast.LENGTH_SHORT).show();
+            return;
+        } else {
             googleMap.getUiSettings().setMyLocationButtonEnabled(true);
-            // set my location
-            googleMap.setMyLocationEnabled(true);
+
             googleMap.getUiSettings().setCompassEnabled(false);
             googleMap.getUiSettings().setRotateGesturesEnabled(false);
             googleMap.getUiSettings().setScrollGesturesEnabled(false);
@@ -322,46 +321,6 @@ public class MapFragmnet extends Fragment implements OnMapClickListener, OnQuery
             googleMap.getUiSettings().setZoomControlsEnabled(true);
             googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
 
-            try {
-                // Getting LocationManager object from System Service LOCATION_SERVICE
-                LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-
-                // Creating a criteria object to retrieve provider
-                Criteria criteria = new Criteria();
-
-                // Getting the name of the best provider
-                String provider = locationManager.getBestProvider(criteria, true);
-
-                // Getting Current Location
-                if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
-                    return;
-                }
-                Location location = locationManager.getLastKnownLocation(provider);
-                double latitude = location.getLatitude();
-
-                // Getting longitude of the current location
-                double longitude = location.getLongitude();
-
-                // Creating a LatLng object for the current location
-                LatLng latLng = new LatLng(latitude, longitude);
-
-                // Showing the current location in Google Map
-                googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-
-                // Zoom in the Google Map
-                googleMap.animateCamera(CameraUpdateFactory.zoomTo(15));
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            //googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(BROOKLYN_BRIDGE, 13));
             googleMap.setOnMapClickListener(this);
             googleMap.setOnMarkerClickListener(new OnMarkerClickListener() {
 
@@ -407,7 +366,86 @@ public class MapFragmnet extends Fragment implements OnMapClickListener, OnQuery
 
                 }
             });
+
+
+            // Getting Current Location
+            if (ActivityCompat.checkSelfPermission(actvity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                ActivityCompat.requestPermissions(actvity, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATON_PERMISSION_CODE);
+                return;
+            }
+            setLocationEnable();
+
+
+            //googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(BROOKLYN_BRIDGE, 13));
+
         }
+
+    }
+
+    private void setLocationEnable() {
+
+        // Getting LocationManager object from System Service LOCATION_SERVICE
+        LocationManager locationManager = (LocationManager) actvity.getSystemService(Context.LOCATION_SERVICE);
+
+        // Creating a criteria object to retrieve provider
+        Criteria criteria = new Criteria();
+
+        // Getting the name of the best provider
+        String provider = locationManager.getBestProvider(criteria, true);
+        // set my location
+        if (ActivityCompat.checkSelfPermission(actvity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        googleMap.setMyLocationEnabled(true);
+        Location location = locationManager.getLastKnownLocation(provider);
+
+        if(location!=null) {
+            double latitude = location.getLatitude();
+
+            // Getting longitude of the current location
+            double longitude = location.getLongitude();
+
+            // Creating a LatLng object for the current location
+            LatLng latLng = new LatLng(latitude, longitude);
+
+            // Showing the current location in Google Map
+            googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+
+            // Zoom in the Google Map
+            googleMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+        }
+    }
+
+
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == LOCATON_PERMISSION_CODE) {
+            if (grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED ) {
+                setLocationEnable();
+            } else {
+                //Displaying another toast if permission is not granted
+                Toast.makeText(actvity, "Oops you just denied the permission", Toast.LENGTH_LONG).show();
+            }
+        }
+
 
     }
 
@@ -432,7 +470,7 @@ public class MapFragmnet extends Fragment implements OnMapClickListener, OnQuery
 
 	 
 	/*@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu) {
 		try{
 		MenuInflater menuInflater = getMenuInflater();
 		menuInflater.inflate(R.menu.map_menu, menu);
@@ -463,6 +501,7 @@ public class MapFragmnet extends Fragment implements OnMapClickListener, OnQuery
 
     @Override
     public void onMapClick(LatLng latlan) {
+        Log.e(TAG, "onMapClick: " );
         if (!isGeometryClosed && isStartGeometry) {
             latLang.add(latlan);
             GeoPoint point = new GeoPoint(latlan.latitude, latlan.longitude);
@@ -665,17 +704,17 @@ public class MapFragmnet extends Fragment implements OnMapClickListener, OnQuery
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        Log.e(TAG, "onMapReady: "+googleMap );
+        Log.e(TAG, "onMapReady: " + googleMap);
         this.googleMap = googleMap;
         initilizeMap();
     }
 
     @Override
     public void onPlaceSelected(Place place) {
-        Log.e(TAG, "onPlaceSelected: "+place.getName() );
+        Log.e(TAG, "onPlaceSelected: " + place.getName());
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(place.getLatLng(), 15);
-        if(googleMap!=null) {
-            Log.e(TAG, "onPlaceSelected: " );
+        if (googleMap != null) {
+            Log.e(TAG, "onPlaceSelected: ");
             googleMap.moveCamera(cameraUpdate);
         }
 
