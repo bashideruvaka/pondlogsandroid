@@ -3,8 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Logger/Logger.iml" filepath="$PROJECT_DIR$/Logger/Logger.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PondLogs_Git.iml" filepath="$PROJECT_DIR$/PondLogs_Git.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/pondlogsandroid.iml" filepath="$PROJECT_DIR$/pondlogsandroid.iml" />
     </modules>
   </component>
 </project>

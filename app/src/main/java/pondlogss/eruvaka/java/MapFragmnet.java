@@ -302,6 +302,7 @@ public class MapFragmnet extends Fragment implements OnMapClickListener, OnQuery
                 }
             }
         });
+        initilizeMap();
         return Map;
     }
 
