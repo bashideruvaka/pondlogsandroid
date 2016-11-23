@@ -789,7 +789,7 @@ public void updatedata() {
 					       	    	AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
 					       	     	 alertDialog.setTitle("Confirm Delete...");
 					       	         alertDialog.setMessage("Are you sure you want delete this?");
-					       	         alertDialog.setIcon(R.drawable.delete);
+					       	         alertDialog.setIcon(R.drawable.delete2);
 					       	         alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
 					       	            public void onClick(DialogInterface dialog,int which) {
 					       	 

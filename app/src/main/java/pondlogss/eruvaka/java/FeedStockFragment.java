@@ -55,6 +55,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -395,13 +396,20 @@ public class FeedStockFragment extends Fragment {
 						  finally{
 							  database.close();
 						  }						
-						 final TableRow tablerow= new TableRow(getActivity());
-				   		   
+						/* final TableRow tablerow= new TableRow(getActivity());
+
 				       	   TableLayout.LayoutParams lp = 
 				       			new TableLayout.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT,TableLayout.LayoutParams.WRAP_CONTENT);
 				         	    int leftMargin=5;int topMargin=10;int rightMargin=5;int bottomMargin=0;
 				       			lp.setMargins(leftMargin, topMargin, rightMargin, bottomMargin);             
-				       			///tablerow.setLayoutParams(lp);
+				       			///tablerow.setLayoutParams(lp);*/
+					final LinearLayout tablerow=new LinearLayout(getActivity());
+					tablerow.setOrientation(LinearLayout.HORIZONTAL);
+					LinearLayout.LayoutParams paramas  = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+							LinearLayout.LayoutParams.WRAP_CONTENT,1);
+					paramas .setMargins(0,0,0,0);
+					tablerow.setLayoutParams(paramas );
+					tablerow.setPadding(0,0,0,0);
 				       			if(rType.equals("NONE")){
 				       				final TextView feedname=new TextView(getActivity());
 					       			feedname.setText(rName);
@@ -413,6 +421,9 @@ public class FeedStockFragment extends Fragment {
 					       			feedname.setFreezesText(true);
 					       			//feedname.setEms(10);
 					       		    tablerow.addView(feedname);
+									LinearLayout.LayoutParams paramas91 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+											LinearLayout.LayoutParams.WRAP_CONTENT,1);
+									feedname.setLayoutParams(paramas91);
 								}else{
 									final TextView feedname=new TextView(getActivity());
 					       			feedname.setText(rName+" - "+rType);
@@ -424,8 +435,17 @@ public class FeedStockFragment extends Fragment {
 					       			feedname.setFreezesText(true);
 					       			 
 					       		    tablerow.addView(feedname);
+									LinearLayout.LayoutParams paramas91 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+											LinearLayout.LayoutParams.WRAP_CONTENT,1);
+									feedname.setLayoutParams(paramas91);
 								}
-				       		final TableRow datetablerow=new TableRow(getActivity());
+				       		final LinearLayout datetablerow=new LinearLayout(getActivity());
+					LinearLayout.LayoutParams paramas2  = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+							LinearLayout.LayoutParams.WRAP_CONTENT,1);
+					paramas2.setMargins(0,0,0,0);
+					datetablerow.setLayoutParams(paramas2);
+					datetablerow.setPadding(0,0,0,0);
+
 				       			final TextView date=new TextView(getActivity());
 				       			try{
 									 
@@ -447,10 +467,14 @@ public class FeedStockFragment extends Fragment {
 				       			datetablerow.addView(date);
 								
 				       		 final TextView edit=new TextView(getActivity());
-							 edit.setCompoundDrawablesWithIntrinsicBounds(R.drawable.edit_new,0,0,0);
-				       		 edit.setGravity(Gravity.CENTER);
-				       		 edit.setClickable(true);
-							 edit.setFreezesText(true);
+					edit.setTextColor(Color.BLACK);
+					edit.setGravity(Gravity.LEFT);
+					edit.setFreezesText(true);
+					edit.setTextSize(18);
+					edit.setFocusable(false);
+					edit.setPadding(0,0,10,0);
+
+					edit.setCompoundDrawablesWithIntrinsicBounds(R.drawable.edit,0,0,0);
 							 edit.setOnClickListener(new OnClickListener(){
 					       	     @Override
 					       	     public void onClick(View v) {
@@ -497,11 +521,19 @@ public class FeedStockFragment extends Fragment {
 							 tablerow.addView(edit);
 				       		    
 				       		 final TextView delete=new TextView(getActivity());
-				       		 delete.setCompoundDrawablesWithIntrinsicBounds(R.drawable.delete_new,0,0,0);
+				       		/* delete.setCompoundDrawablesWithIntrinsicBounds(R.drawable.deletem,0,0,0);
 				       		 delete.setGravity(Gravity.CENTER);
 				       		 delete.setFreezesText(true);
-				       		 delete.setClickable(true);
-				       		delete.setOnClickListener(new OnClickListener(){
+				       		 delete.setClickable(true);*/
+					delete.setTextColor(Color.BLACK);
+					delete.setGravity(Gravity.LEFT);
+					delete.setFreezesText(true);
+					delete.setTextSize(18);
+					delete.setFocusable(false);
+					delete.setPadding(0,0,10,0);
+
+					delete.setCompoundDrawablesWithIntrinsicBounds(R.drawable.delete,0,0,0);
+				       		 delete.setOnClickListener(new OnClickListener(){
 				       	     @Override
 				       	     public void onClick(View v) {
 				       	    	try {
@@ -546,7 +578,13 @@ public class FeedStockFragment extends Fragment {
 				       	 });
 				       		tablerow.addView(delete);
 				       	       		
-						final TableRow tablerow2=new TableRow(getActivity());
+						//final TableRow tablerow2=new TableRow(getActivity());
+					final LinearLayout tablerow2=new LinearLayout(getActivity());
+					LinearLayout.LayoutParams paramas3  = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+							LinearLayout.LayoutParams.WRAP_CONTENT,1);
+					paramas3.setMargins(0,0,0,0);
+					tablerow2.setLayoutParams(paramas3);
+					tablerow2.setPadding(0,0,0,0);
 						      //tablerow2.setLayoutParams(lp);
 								final TextView qstock=new TextView(getActivity());
 								qstock.setText("Qty in Stock: "+quantitysStock);
@@ -557,8 +595,13 @@ public class FeedStockFragment extends Fragment {
 								qstock.setFreezesText(true);
 								tablerow2.addView(qstock);
 								
-						final TableRow lastqtytablerow=new TableRow(getActivity());	
-						
+						//final TableRow lastqtytablerow=new TableRow(getActivity());
+					final LinearLayout lastqtytablerow=new LinearLayout(getActivity());
+					LinearLayout.LayoutParams paramas4  = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+							LinearLayout.LayoutParams.WRAP_CONTENT,1);
+					paramas4.setMargins(0,0,0,0);
+					lastqtytablerow.setLayoutParams(paramas4);
+					lastqtytablerow.setPadding(0,0,0,0);
 								final TextView tquantity=new TextView(getActivity());
 								tquantity.setText("Last Qty: "+totalPurchased);
 								tquantity.setTextColor(Color.BLACK);

@@ -127,7 +127,7 @@ public class ExpandableListAdapterStock extends BaseExpandableListAdapter{
       	        //alertDialog.setMessage("Do you really want to remove?");
       	 
       	        // Setting Icon to Dialog
-      	        alertDialog.setIcon(R.drawable.delete);
+      	        alertDialog.setIcon(R.drawable.delete2);
       	 
       	        // Setting Positive "Yes" Button
       	        alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {

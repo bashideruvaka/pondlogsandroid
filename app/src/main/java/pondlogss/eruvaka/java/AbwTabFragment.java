@@ -370,8 +370,7 @@ public class AbwTabFragment extends Fragment{
 								mylist.add(map1);
 								//System.out.println(mylist);
 								}
-						         
-						
+
 							}
 							
 					    }catch (Throwable t) {
@@ -399,7 +398,6 @@ public class AbwTabFragment extends Fragment{
 			BufferedReader reader = new BufferedReader(new InputStreamReader(instream));
 		    StringBuilder sb = new StringBuilder();
 		    String line = null;
-
 		    while ((line = reader.readLine()) != null) {
 		    	
 		        sb.append(line);
