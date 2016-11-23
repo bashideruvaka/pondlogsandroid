@@ -2874,9 +2874,10 @@ public class UpdateActivity extends ActionBarActivity {
 				// TODO Auto-generated method stub
 				switch (item.getItemId()) {
 				case android.R.id.home:
-		       		Intent intent1 = new Intent(getApplicationContext(), MainActivity.class);
+		       		/*Intent intent1 = new Intent(getApplicationContext(), MainActivity.class);
 		            intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		            startActivity(intent1);
+		            startActivity(intent1);*/
+					onBackPressed();
 			    return true;
 				default:
 				break;

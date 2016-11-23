@@ -330,7 +330,6 @@ public class PondsFragment extends Fragment {
                                     map3.put("harvest", e3.getString("h" + z).toString().trim());
                                     //System.out.println(e3.getString("h"+z).toString().trim());
                                     mylist1.add(map3);
-
                                     System.out.println(mylist1);
                                 }
 						 		

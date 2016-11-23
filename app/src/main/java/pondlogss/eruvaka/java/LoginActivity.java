@@ -167,7 +167,6 @@ public class LoginActivity extends ActionBarActivity {
                 // userid who login id
                 String LocationOwner = map.get("LocationOwner").toString().trim();
                 sharedPreferenceHandle.putString("LocationOwner", LocationOwner);
-
                 String FeildID = map.get("LocationTankId").toString().trim();
                 String FeildName = map.get("LocationName").toString().trim();
                 try {
@@ -195,7 +194,6 @@ public class LoginActivity extends ActionBarActivity {
         for (int k = 0; k < mylist2.size(); k++) {
             try {
                 Map<String, String> map2 = mylist2.get(k);
-
                 String UserType = map2.get("userType").toString().trim();
                 String UserId = map2.get("userId").toString().trim();
                 System.out.println(UserId);
@@ -271,10 +269,8 @@ public class LoginActivity extends ActionBarActivity {
 
     private void retrieveLoginClassData() {
 
-
         final String username = edtUserName.getText().toString().toLowerCase().trim();
         final String password = edtPassword.getText().toString().trim();
-
 
         JsonObject object =new JsonObject();
         object.addProperty("username",username);

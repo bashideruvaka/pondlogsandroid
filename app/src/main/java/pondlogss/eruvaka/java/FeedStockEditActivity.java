@@ -1004,9 +1004,10 @@ public class FeedStockEditActivity extends ActionBarActivity{
 		switch (item.getItemId()) {
 		case android.R.id.home:
 			try{
-	   		Intent intent1 = new Intent(getApplicationContext(), MainActivity.class);
+	   		/*Intent intent1 = new Intent(getApplicationContext(), MainActivity.class);
 	        intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-	        startActivity(intent1);
+	        startActivity(intent1);*/
+				onBackPressed();
 			}catch (Exception e) {
 				// TODO: handle exception
 				e.printStackTrace();

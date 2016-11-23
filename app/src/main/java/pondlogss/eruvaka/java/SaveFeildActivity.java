@@ -371,8 +371,9 @@ public class SaveFeildActivity extends ActionBarActivity {
 							   String sucess=("\""+"success"+"\"").toString().trim();
 							   if(replace1.equals(sucess)){
 								  try{
-								   LoginNetworkAviable();
-								   Toast.makeText(getApplicationContext(), "Pond Added Sucessfully", Toast.LENGTH_SHORT).show();		 
+								 //  LoginNetworkAviable();
+								   Toast.makeText(getApplicationContext(), "Pond Added Sucessfully", Toast.LENGTH_SHORT).show();
+                                   onBackPressed();
 								  }catch(Exception e){
 									  e.printStackTrace();
 								  }
@@ -536,10 +537,10 @@ public class SaveFeildActivity extends ActionBarActivity {
 			// TODO Auto-generated method stub
 			switch (item.getItemId()) {
 			case android.R.id.home:
-			 
-	       		Intent intent1 = new Intent(getApplicationContext(), MapActivity.class);
+			 	/*Intent intent1 = new Intent(getApplicationContext(), MapActivity.class);
 	            intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-	            startActivity(intent1);
+	            startActivity(intent1);*/
+				onBackPressed();
 		        return true;
 			   	default:
 		       

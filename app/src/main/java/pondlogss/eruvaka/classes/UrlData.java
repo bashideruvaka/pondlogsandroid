@@ -6,7 +6,7 @@ public class UrlData {
 	//public static final String 52.77.24.190="pondlogs.com".toString().trim();
 	//public static final String 52.77.24.190="52.77.24.190".toString().trim();
 	public static final String URL_LOGIN="mobilelogin.php?logincheck=1&format=json";
-	public static final String URL_SAVEABW="http://52.77.24.190/PondLogs/mobile/abwDetails.php?saveABW=1&format=json";
+	public static final String URL_SAVEABW="http://52.77.24.190/PondLogs_new/mobile/abwDetails.php?saveABW=1&format=json";
 	public static final String URL_POND_DETAILS="http://52.77.24.190/PondLogs_new/mobile/pondsDetails.php?pondDetails=1&format=json";
 	public static final String URL_LASTABW="http://52.77.24.190/PondLogs_new/mobile/abwDetails.php?lastABW=1&format=json";
 	public static final String URL_ABWDATA="http://52.77.24.190/PondLogs_new/mobile/abwDetails.php?abwData=1&format=json";

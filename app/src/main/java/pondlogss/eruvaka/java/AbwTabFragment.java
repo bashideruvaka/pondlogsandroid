@@ -203,6 +203,10 @@ public class AbwTabFragment extends Fragment{
 											   cursor.moveToNext();	 							
 											} 	
 										}catch(Exception e){
+
+
+
+
 											e.printStackTrace();
 										}
 								}
@@ -301,7 +305,8 @@ public class AbwTabFragment extends Fragment{
 				    String pondid=ApplicationData.getTankid().toString().trim();
 				    String locid=ApplicationData.getLocationId().toString().trim();
 				    String harvest_schedule=ApplicationData.getharvest().toString().trim();
-				    
+					System.out.println(harvest_schedule);
+
 						Log.i(getClass().getSimpleName(), "sending  task - started");
 						JSONObject loginJson = new JSONObject();
 						loginJson.put("ownerId", LocationOwner);

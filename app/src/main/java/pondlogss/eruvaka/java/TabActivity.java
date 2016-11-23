@@ -28,6 +28,8 @@ public class TabActivity  extends ActionBarActivity{
 			//bar.setIcon(R.drawable.back_icon);
 		    mytext=(TextView)findViewById(R.id.mytext);
 			mytext.setText("Pond Details");
+			//String LocationId = ApplicationData.getLocationName().toString().trim();
+
 		    bar.setDisplayHomeAsUpEnabled(true);
 			bar.setIcon(android.R.color.transparent);
 	        }catch(Exception e){
@@ -44,9 +46,10 @@ public class TabActivity  extends ActionBarActivity{
         switch (item.getItemId()) {
             case android.R.id.home:
                 // app icon in action bar clicked; go home
-                Intent intent = new Intent(this, MainActivity.class);
+                /*Intent intent = new Intent(this, MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
+                startActivity(intent);*/
+				onBackPressed();
                 return true;
                 default:
                 return super.onOptionsItemSelected(item);

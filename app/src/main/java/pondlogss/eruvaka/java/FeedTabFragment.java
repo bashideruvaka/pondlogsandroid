@@ -286,6 +286,8 @@ public class FeedTabFragment extends Fragment{
 				 if(mylist!=null){
 					 updatedata();
 				 }else{
+
+
 					 Toast.makeText(getActivity(), "unable to get data please try again", Toast.LENGTH_SHORT).show();
 				 }
 				  	

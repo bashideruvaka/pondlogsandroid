@@ -595,7 +595,7 @@ public class FeedFragment extends Fragment {
 						map1.put("sch10", e1.getString("sch10"));
 
 						mylist.add(map1);
-						//System.out.println(mylist);
+						System.out.println(mylist);
 					}
 				}
 
@@ -872,7 +872,7 @@ public class FeedFragment extends Fragment {
 						final String sch10 = map.get("sch10").toString().trim();
 						map1.put("Sch10", sch10);
 						feedmylist.add(map1);  
-						//System.out.println(feedmylist);
+						System.out.println(feedmylist);
 					 	                   
 						}
 					}
@@ -885,10 +885,10 @@ public class FeedFragment extends Fragment {
 		}
 		if (feedmylist != null) {
 			DeleteFeedEntrydata();
-
 			listFeedEntryHeader=new ArrayList<GroupFeedEntry>();
-			List<ChildFeedEntry> childfeedentrydata;
+			List<ChildFeedEntry> childfeedentrydata=null;
 			listFeedEntryChild=new HashMap<GroupFeedEntry, List<ChildFeedEntry>>();
+
 			try{
 				for (int i = 0; i < feedmylist.size(); i++) {
 					 
@@ -900,9 +900,9 @@ public class FeedFragment extends Fragment {
 		                   groupfeedentry.setPondName(pname);
 		                   groupfeedentry.setPondId(snumber);
 		                   listFeedEntryHeader.add(groupfeedentry);
-		                    
+
 					 	final String sch1 = map.get("Sch1").toString().trim();
-					  	final String sch2 = map.get("Sch2").toString().trim();
+				 	  	final String sch2 = map.get("Sch2").toString().trim();
 				 		final String sch3 = map.get("Sch3").toString().trim();
 					 	final String sch4 = map.get("Sch4").toString().trim();
 					 	final String sch5 = map.get("Sch5").toString().trim();
@@ -924,12 +924,13 @@ public class FeedFragment extends Fragment {
 							childfeedentry.setsch9(sch9);
 							childfeedentry.setsch10(sch10);
 							childfeedentrydata.add(childfeedentry);
-										
+
 							listFeedEntryChild.put(listFeedEntryHeader.get(i), childfeedentrydata);
-							
-							   String rsId = ApplicationData.getresid().toString().trim();
-								String rnametype=ApplicationData.getrestypename().toString().trim();
+
+
 								try {
+									String rsId = ApplicationData.getresid().toString().trim();
+									String rnametype=ApplicationData.getrestypename().toString().trim();
 									helper = new DBHelper(getActivity());
 									database = helper.getReadableDatabase();
 									st = database.compileStatement("insert into feedentry values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
@@ -978,9 +979,9 @@ public class FeedFragment extends Fragment {
 									database.close();
 								}
 			      }
-				 
+
 			listAdapterFeedEntry=new ExpandableListAdapterFeedEntry(getActivity(), listFeedEntryHeader, listFeedEntryChild);
-            expListView.setAdapter(listAdapterFeedEntry); 
+            expListView.setAdapter(listAdapterFeedEntry);
 			} catch (Exception e) {
 				// TODO: handle exception
 			}
