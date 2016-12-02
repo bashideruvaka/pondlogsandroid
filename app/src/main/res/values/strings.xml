@@ -34,5 +34,7 @@
     
     <!-- Content Description -->
     <string name="desc_list_item_icon">Item Icon</string>
-
+    <string name="action_search">Search</string>
+    <string name="search_hint">Search Places</string>
+    <string name="search_settings">Search Places</string>
 </resources>

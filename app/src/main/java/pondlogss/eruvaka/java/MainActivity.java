@@ -289,4 +289,19 @@ public class MainActivity extends AppCompatActivity {
 		mDrawerToggle.onConfigurationChanged(newConfig);
 	}
 
+
+	@Override
+	protected void onNewIntent(Intent intent)
+	{
+		super.onNewIntent(intent);
+		setIntent(intent);
+
+		android.support.v4.app.Fragment frag = getSupportFragmentManager().findFragmentById(R.id.frame_container);
+		if (frag instanceof MapFragmnet) {
+
+				((MapFragmnet)frag).handleIntent(intent);
+		}
+
+	}
+
 }

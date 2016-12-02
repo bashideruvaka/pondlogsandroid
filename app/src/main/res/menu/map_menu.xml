@@ -6,7 +6,7 @@
    android:id="@+id/action_searchview"
     android:title="search"
     android:icon="@drawable/search"
-    android:actionViewClass="android.widget.SearchView"
+    app:actionViewClass="android.widget.SearchView"
     app:showAsAction="ifRoom"/>    
      
 

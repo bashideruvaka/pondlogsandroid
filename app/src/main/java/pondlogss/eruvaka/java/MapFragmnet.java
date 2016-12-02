@@ -13,10 +13,6 @@ import org.osmdroid.util.GeoPoint;
 import pondlogss.eruvaka.R;
 import pondlogss.eruvaka.database.DBHelper;
 
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
-import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -58,10 +54,12 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -75,7 +73,7 @@ import android.widget.SearchView;
 import android.widget.Toast;
 import android.widget.SearchView.OnQueryTextListener;
 
-public class MapFragmnet extends Fragment implements OnMapClickListener, OnQueryTextListener, OnMapReadyCallback, PlaceSelectionListener {
+public class MapFragmnet extends Fragment implements OnMapClickListener,OnMapReadyCallback, LoaderManager.LoaderCallbacks<Cursor> {
     private static final String TAG = "MapFragmnet";
     private static final int LOCATON_PERMISSION_CODE = 500;
     private GoogleMap googleMap;
@@ -96,8 +94,8 @@ public class MapFragmnet extends Fragment implements OnMapClickListener, OnQuery
     private static final double EARTH_RADIUS = 6371000;
     private SupportMapFragment mapFragment;
 
-    private View Map;
     private Activity actvity;
+    private View view;
 
     private static final LatLngBounds BOUNDS_MOUNTAIN_VIEW = new LatLngBounds(
             new LatLng(37.398160, -122.180831), new LatLng(37.430610, -121.972090));
@@ -110,22 +108,18 @@ public class MapFragmnet extends Fragment implements OnMapClickListener, OnQuery
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // TODO Auto-generated method stub
-        Map = inflater.inflate(R.layout.fragmnet_map, container, false);
+        view = inflater.inflate(R.layout.fragmnet_map, container, false);
         setHasOptionsMenu(true);
         mapFragment = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map1));
         mapFragment.getMapAsync(this);
 
-        PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
-                actvity.getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
-        autocompleteFragment.setOnPlaceSelectedListener(this);
-        autocompleteFragment.setHint("Search a Location");
+
         // autocompleteFragment.setBoundsBias(BOUNDS_MOUNTAIN_VIEW);
 
 
-        clear = (Button) Map.findViewById(R.id.btnimg_clear_canvas1);
-        addpond = (Button) Map.findViewById(R.id.btnimg_start_drawing1);
-        save = (Button) Map.findViewById(R.id.btnimg_savedraw1);
+        clear = (Button) view.findViewById(R.id.btnimg_clear_canvas1);
+        addpond = (Button) view.findViewById(R.id.btnimg_start_drawing1);
+        save = (Button) view.findViewById(R.id.btnimg_savedraw1);
 
         clear.setOnClickListener(new OnClickListener() {
 
@@ -303,7 +297,7 @@ public class MapFragmnet extends Fragment implements OnMapClickListener, OnQuery
             }
         });
         initilizeMap();
-        return Map;
+        return view;
     }
 
     private void initilizeMap() {
@@ -315,9 +309,9 @@ public class MapFragmnet extends Fragment implements OnMapClickListener, OnQuery
         } else {
             googleMap.getUiSettings().setMyLocationButtonEnabled(true);
 
-            googleMap.getUiSettings().setCompassEnabled(false);
-            googleMap.getUiSettings().setRotateGesturesEnabled(false);
-            googleMap.getUiSettings().setScrollGesturesEnabled(false);
+            googleMap.getUiSettings().setCompassEnabled(true);
+            googleMap.getUiSettings().setRotateGesturesEnabled(true);
+            googleMap.getUiSettings().setScrollGesturesEnabled(true);
             // set zooming controll
             googleMap.getUiSettings().setZoomControlsEnabled(true);
             googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
@@ -435,7 +429,7 @@ public class MapFragmnet extends Fragment implements OnMapClickListener, OnQuery
 
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode,  String[] permissions,  int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
         if (requestCode == LOCATON_PERMISSION_CODE) {
@@ -468,37 +462,6 @@ public class MapFragmnet extends Fragment implements OnMapClickListener, OnQuery
         rectOptions.strokeWidth(3);
         polygon = googleMap.addPolygon(rectOptions);
     }
-
-	 
-	/*@Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-		try{
-		MenuInflater menuInflater = getMenuInflater();
-		menuInflater.inflate(R.menu.map_menu, menu);
-		SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-		 searchView.setOnQueryTextListener(this);
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-		return super.onCreateOptionsMenu(menu);
-	}
-	   
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// TODO Auto-generated method stub
-		switch (item.getItemId()) {
-		case android.R.id.home:
-       		Intent intent1 = new Intent(getApplicationContext(), MainActivity.class);
-            intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent1);
-	        return true;
-		   	default:
-	       	
-		}  
-		return super.onOptionsItemSelected(item);
-	
-	}*/
-
 
     @Override
     public void onMapClick(LatLng latlan) {
@@ -672,35 +635,52 @@ public class MapFragmnet extends Fragment implements OnMapClickListener, OnQuery
         return (longitude - longitudeRef) * circumference * Math.cos(Math.toRadians(latitude)) / 360.0;
     }
 
+    public void handleIntent(Intent intent)
+    {
+        if (intent.getAction().equals(Intent.ACTION_SEARCH))
+        {
+            doSearch(intent.getStringExtra(SearchManager.QUERY));
+        }
+        else if (intent.getAction().equals(Intent.ACTION_VIEW))
+        {
+            getPlace(intent.getStringExtra(SearchManager.EXTRA_DATA_KEY));
+        }
+    }
+
+
+
+
+    private void doSearch(String query)
+    {
+        Bundle data = new Bundle();
+        data.putString("query", query);
+        getLoaderManager().restartLoader(0, data, this);
+    }
+
+    private void getPlace(String query)
+    {
+        Bundle data = new Bundle();
+        data.putString("query", query);
+        getLoaderManager().restartLoader(1, data, this);
+    }
+
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.map_menu, menu);
-        SearchView searchView = (SearchView) menu.findItem(R.id.action_searchview).getActionView();
-        //searchView.setOnQueryTextListener(getActivity());
-        //   searchView.setQueryHint("Search for Places�");
-        //  searchView.setIconified(false);
         super.onCreateOptionsMenu(menu, inflater);
-    }
 
-    // The following callbacks are called for the SearchView.OnQueryChangeListener
-    public boolean onQueryTextChange(String newText) {
-        newText = newText.isEmpty() ? "" : "Query so far: " + newText;
+        // Inflate the menu; this adds items to the action bar if it is present.
+        inflater.inflate(R.menu.main, menu);
 
-        return true;
-    }
-
-    public boolean onQueryTextSubmit(String query) {
-        //Toast.makeText(this, "Searching for: " + query + "...", Toast.LENGTH_SHORT).show();
-        if (query != null && !query.equals("")) {
-            try {
-                new GeocoderTask().execute(query);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        // Get the SearchView and set the searchable configuration
+        SearchManager searchManager = (SearchManager) actvity.getSystemService(Context.SEARCH_SERVICE);
+        android.support.v7.widget.SearchView searchView = (android.support.v7.widget.SearchView) menu.findItem(R.id.action_search).getActionView();
+        // Assumes current activity is the searchable activity
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(actvity.getComponentName()));
+        // searchView.setIconifiedByDefault(false); // Do not iconify the
+        // widget; expand it by default
 
 
-        }
-        return true;
     }
 
     @Override
@@ -710,81 +690,90 @@ public class MapFragmnet extends Fragment implements OnMapClickListener, OnQuery
         initilizeMap();
     }
 
+
     @Override
-    public void onPlaceSelected(Place place) {
-        Log.e(TAG, "onPlaceSelected: " + place.getName());
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(place.getLatLng(), 15);
+    public Loader<Cursor> onCreateLoader(int arg0, Bundle query)
+    {
+        CursorLoader cLoader = null;
+        if (arg0 == 0)
+            cLoader = new CursorLoader(actvity, PlaceProvider.SEARCH_URI, null, null,
+                    new String[]
+                            {
+                                    query.getString("query")
+                            }, null);
+        else if (arg0 == 1)
+            cLoader = new CursorLoader(actvity, PlaceProvider.DETAILS_URI, null, null,
+                    new String[]
+                            {
+                                    query.getString("query")
+                            }, null);
+        return cLoader;
+
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> arg0, Cursor c)
+    {
+        showLocations(c);
+
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> arg0)
+    {
+        // TODO Auto-generated method stub
+    }
+
+
+
+
+
+    @Override
+    public void onDestroyView() {
+
         if (googleMap != null) {
-            Log.e(TAG, "onPlaceSelected: ");
-            googleMap.moveCamera(cameraUpdate);
+            googleMap.clear();
         }
 
-    }
-
-    @Override
-    public void onError(Status status) {
-        Log.e(TAG, "onError: Status = " + status.toString());
-        Toast.makeText(actvity, "Place selection failed: " + status.getStatusMessage(),
-                Toast.LENGTH_SHORT).show();
-    }
-
-    // An AsyncTask class for accessing the GeoCoding Web Service
-    private class GeocoderTask extends AsyncTask<String, Void, List<Address>> {
-
-        @Override
-        protected List<Address> doInBackground(String... locationName) {
-            // Creating an instance of Geocoder class
-
-            Geocoder geocoder = new Geocoder(getActivity());
-            List<Address> addresses = null;
+        SupportMapFragment f = (SupportMapFragment) getFragmentManager()
+                .findFragmentById(R.id.map);
+        if (f != null) {
             try {
-
-                // Getting a maximum of 3 Address that matches the input text
-                addresses = geocoder.getFromLocationName(locationName[0], 3);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return addresses;
-        }
-
-        @Override
-        protected void onPostExecute(List<Address> addresses) {
-            try {
-                if (addresses == null || addresses.size() == 0) {
-                    Toast.makeText(getActivity(), "No Location found", Toast.LENGTH_SHORT).show();
-                }
-
-                // Clears all the existing markers on the map
-                googleMap.clear();
-
-                // Adding Markers on Google Map for each matching address
-                for (int i = 0; i < addresses.size(); i++) {
-
-                    Address address = (Address) addresses.get(i);
-
-                    // Creating an instance of GeoPoint, to display in Google Map
-                    latLng = new LatLng(address.getLatitude(), address.getLongitude());
-
-                    String addressText = String.format("%s, %s",
-                            address.getMaxAddressLineIndex() > 0 ? address.getAddressLine(0) : "",
-                            address.getCountryName());
-
-                    markerOptions = new MarkerOptions();
-                    markerOptions.position(latLng);
-                    markerOptions.title(addressText);
-
-                    googleMap.addMarker(markerOptions);
-
-                    // Locate the first location
-                    if (i == 0)
-                        googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
-                }
+                getFragmentManager().beginTransaction().remove(f).commit();
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
 
+
+        googleMap = null;
+
+        super.onDestroyView();
+
+
+
+    }
+
+    private void showLocations(Cursor c)
+    {
+        MarkerOptions markerOptions = null;
+        LatLng position = null;
+        googleMap.clear();
+        while (c.moveToNext())
+        {
+            markerOptions = new MarkerOptions();
+            position = new LatLng(Double.parseDouble(c.getString(1)), Double.parseDouble(c
+                    .getString(2)));
+            markerOptions.position(position);
+            markerOptions.title(c.getString(0));
+            googleMap.addMarker(markerOptions);
+        }
+        if (position != null)
+        {
+            CameraUpdate cameraPosition = CameraUpdateFactory.newLatLng(position);
+            googleMap.animateCamera(cameraPosition);
+        }
     }
 
 }
