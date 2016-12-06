@@ -17,9 +17,12 @@ import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.FragmentManager;
+import android.app.SearchManager;
 import android.content.Context;
+import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.Loader;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
@@ -33,7 +36,10 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.app.LoaderManager;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -45,6 +51,7 @@ import android.widget.SearchView.OnQueryTextListener;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
@@ -63,7 +70,9 @@ import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
-public class MapActivity extends ActionBarActivity implements OnMapReadyCallback {
+public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, android.app.LoaderManager.LoaderCallbacks<Cursor> {
+
+    private static final String TAG = "MapActivity";
     // Google Map
     private GoogleMap googleMap;
     ArrayList<LatLng> latLang = new ArrayList<LatLng>();
@@ -101,6 +110,7 @@ public class MapActivity extends ActionBarActivity implements OnMapReadyCallback
     private static final LatLng TIMES_SQUARE1 = new LatLng(16.543, 80.958);
     private static final LatLng BROOKLYN_BRIDGE1 = new LatLng(16.78, 80.2233);
 
+    private SupportMapFragment mapFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +118,8 @@ public class MapActivity extends ActionBarActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.signinupshape));
         setContentView(R.layout.map_activity);
+        mapFragment = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map));
+        mapFragment.getMapAsync(this);
         //action bar themes
         bar = getSupportActionBar();
         bar.setDisplayOptions(android.support.v7.app.ActionBar.DISPLAY_SHOW_CUSTOM);
@@ -119,6 +131,23 @@ public class MapActivity extends ActionBarActivity implements OnMapReadyCallback
         bar.setIcon(android.R.color.transparent);
 
 
+    }
+
+
+    private void initilizeMap() {
+        if (googleMap == null) {
+            Toast.makeText(this, "Sorry! unable to create maps", Toast.LENGTH_SHORT).show();
+            return;
+        } else {
+            googleMap.getUiSettings().setMyLocationButtonEnabled(true);
+
+            googleMap.getUiSettings().setCompassEnabled(true);
+            googleMap.getUiSettings().setRotateGesturesEnabled(true);
+            googleMap.getUiSettings().setScrollGesturesEnabled(true);
+            // set zooming controll
+            googleMap.getUiSettings().setZoomControlsEnabled(true);
+            googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+        }
     }
 
     private void addLines() {
@@ -138,7 +167,7 @@ public class MapActivity extends ActionBarActivity implements OnMapReadyCallback
 
         googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
     /*
-	 *  PolylineOptions polylineOptions = new PolylineOptions();
+     *  PolylineOptions polylineOptions = new PolylineOptions();
     polylineOptions.color(Color.RED);
     polylineOptions.width(5);
     double latitude=Double.parseDouble(c.getString(0));
@@ -161,8 +190,13 @@ public class MapActivity extends ActionBarActivity implements OnMapReadyCallback
     public boolean onCreateOptionsMenu(Menu menu) {
         try {
             MenuInflater menuInflater = getMenuInflater();
-            menuInflater.inflate(R.menu.map_menu, menu);
-            SearchView searchView = (SearchView) menu.findItem(R.id.action_searchview).getActionView();
+            menuInflater.inflate(R.menu.main, menu);
+
+            // Get the SearchView and set the searchable configuration
+            SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+            android.support.v7.widget.SearchView searchView = (android.support.v7.widget.SearchView) menu.findItem(R.id.action_search).getActionView();
+            // Assumes current activity is the searchable activity
+            searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
             // searchView.setOnQueryTextListener(this);
         } catch (Exception e) {
             e.printStackTrace();
@@ -487,86 +521,85 @@ public class MapActivity extends ActionBarActivity implements OnMapReadyCallback
         return true;
     }
 
-    public boolean onQueryTextSubmit(String query) {
-        //Toast.makeText(this, "Searching for: " + query + "...", Toast.LENGTH_SHORT).show();
-
-        if (query != null && !query.equals("")) {
-            try {
-                new GeocoderTask().execute(query);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-
-        }
-        return true;
-    }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        if (googleMap != null) {
-            addLines();
+
+        this.googleMap = googleMap;
+        initilizeMap();
+        addLines();
+
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int arg0, Bundle query) {
+        CursorLoader cLoader = null;
+        if (arg0 == 0)
+            cLoader = new CursorLoader(MapActivity.this, PlaceProvider.SEARCH_URI, null, null,
+                    new String[]
+                            {
+                                    query.getString("query")
+                            }, null);
+        else if (arg0 == 1)
+            cLoader = new CursorLoader(MapActivity.this, PlaceProvider.DETAILS_URI, null, null,
+                    new String[]
+                            {
+                                    query.getString("query")
+                            }, null);
+        return cLoader;
+
+    }
+
+    @Override
+    public void onLoadFinished(android.content.Loader<Cursor> loader, Cursor c) {
+        showLocations(c);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> arg0) {
+
+    }
+
+
+    public void handleIntent(Intent intent) {
+        if (intent.getAction().equals(Intent.ACTION_SEARCH)) {
+            doSearch(intent.getStringExtra(SearchManager.QUERY));
+        } else if (intent.getAction().equals(Intent.ACTION_VIEW)) {
+            getPlace(intent.getStringExtra(SearchManager.EXTRA_DATA_KEY));
         }
     }
 
-    // An AsyncTask class for accessing the GeoCoding Web Service
-    private class GeocoderTask extends AsyncTask<String, Void, List<Address>> {
-
-        @Override
-        protected List<Address> doInBackground(String... locationName) {
-            // Creating an instance of Geocoder class
-
-            Geocoder geocoder = new Geocoder(getApplicationContext());
-            List<Address> addresses = null;
-            try {
-
-                // Getting a maximum of 3 Address that matches the input text
-                addresses = geocoder.getFromLocationName(locationName[0], 3);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return addresses;
-        }
-
-        @Override
-        protected void onPostExecute(List<Address> addresses) {
-            try {
-                if (addresses == null || addresses.size() == 0) {
-                    Toast.makeText(getApplicationContext(), "No Location found", Toast.LENGTH_SHORT).show();
-                }
-
-                // Clears all the existing markers on the map
-                googleMap.clear();
-
-                // Adding Markers on Google Map for each matching address
-                for (int i = 0; i < addresses.size(); i++) {
-
-                    Address address = (Address) addresses.get(i);
-
-                    // Creating an instance of GeoPoint, to display in Google Map
-                    latLng = new LatLng(address.getLatitude(), address.getLongitude());
-
-                    String addressText = String.format("%s, %s",
-                            address.getMaxAddressLineIndex() > 0 ? address.getAddressLine(0) : "",
-                            address.getCountryName());
-
-                    markerOptions = new MarkerOptions();
-                    markerOptions.position(latLng);
-                    markerOptions.title(addressText);
-
-                    googleMap.addMarker(markerOptions);
-
-                    // Locate the first location
-                    if (i == 0)
-                        googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-
+    private void doSearch(String query) {
+        Bundle data = new Bundle();
+        data.putString("query", query);
+        getLoaderManager().restartLoader(0, data, this);
     }
+
+    private void getPlace(String query) {
+        Bundle data = new Bundle();
+        data.putString("query", query);
+        getLoaderManager().restartLoader(1, data, this);
+    }
+
+
+    private void showLocations(Cursor c) {
+        MarkerOptions markerOptions = null;
+        LatLng position = null;
+        googleMap.clear();
+        while (c.moveToNext()) {
+            markerOptions = new MarkerOptions();
+            position = new LatLng(Double.parseDouble(c.getString(1)), Double.parseDouble(c
+                    .getString(2)));
+            markerOptions.position(position);
+            markerOptions.title(c.getString(0));
+            googleMap.addMarker(markerOptions);
+        }
+        if (position != null) {
+            CameraUpdate cameraPosition = CameraUpdateFactory.newLatLng(position);
+            googleMap.animateCamera(cameraPosition);
+        }
+    }
+
 
     /**
      * Method to show the Dialog box
@@ -658,49 +691,15 @@ public class MapActivity extends ActionBarActivity implements OnMapReadyCallback
                                             final double circumference) {
         return (longitude - longitudeRef) * circumference * Math.cos(Math.toRadians(latitude)) / 360.0;
     }
- 
-	  /*   @Override
-	  public void onMapClick(LatLng point) {
-	  
-	   myMap.animateCamera(CameraUpdateFactory.newLatLng(point));
-	   
-	   markerClicked = false;
-	  }
 
-	  @Override
-	  public void onMapLongClick(LatLng point) {
-	  
-	   myMap.addMarker(new MarkerOptions().position(point).title(point.toString()));
-	   
-	   markerClicked = false;
-	  }
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        handleIntent(intent);
 
-	  @Override
-	 public boolean onMarkerClick(Marker marker) {
-	   
-	   if(markerClicked){
-	    
-	    if(polygon != null){
-	     polygon.remove();
-	     polygon = null;
-	    }
-	    
-	    polygonOptions.add(marker.getPosition());
-	    polygonOptions.strokeColor(Color.RED);
-	    polygonOptions.fillColor(Color.BLUE);
-	    polygon = myMap.addPolygon(polygonOptions);
-	   }else{
-	    if(polygon != null){
-	     polygon.remove();
-	     polygon = null;
-	    }
-	    
-	    polygonOptions = new PolygonOptions().add(marker.getPosition());
-	    markerClicked = true;
-	   }
-	   
-	   return true;
-	  }*/
+
+    }
 
 }
 

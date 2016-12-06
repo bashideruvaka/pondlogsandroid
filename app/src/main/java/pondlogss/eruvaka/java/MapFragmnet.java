@@ -52,8 +52,10 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 
@@ -76,6 +78,7 @@ import android.widget.SearchView.OnQueryTextListener;
 public class MapFragmnet extends Fragment implements OnMapClickListener,OnMapReadyCallback, LoaderManager.LoaderCallbacks<Cursor> {
     private static final String TAG = "MapFragmnet";
     private static final int LOCATON_PERMISSION_CODE = 500;
+    private static final int WRITE_PERMISSION_CODE = 501;
     private GoogleMap googleMap;
     ArrayList<LatLng> latLang = new ArrayList<LatLng>();
     ArrayList<IGeoPoint> listPoints = new ArrayList<IGeoPoint>();
@@ -300,6 +303,13 @@ public class MapFragmnet extends Fragment implements OnMapClickListener,OnMapRea
         return view;
     }
 
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        isStoragePermissionGranted();
+    }
+
     private void initilizeMap() {
         // TODO Auto-generated method stub
         // check if map is created successfully or not
@@ -440,7 +450,12 @@ public class MapFragmnet extends Fragment implements OnMapClickListener,OnMapRea
                 Toast.makeText(actvity, "Oops you just denied the permission", Toast.LENGTH_LONG).show();
             }
         }
-
+        else if(requestCode == WRITE_PERMISSION_CODE){
+            if(grantResults[0]== PackageManager.PERMISSION_GRANTED){
+                Log.v(TAG,"Permission: "+permissions[0]+ "was "+grantResults[0]);
+                //resume tasks needing this permission
+            }
+        }
 
     }
 
@@ -499,7 +514,7 @@ public class MapFragmnet extends Fragment implements OnMapClickListener,OnMapRea
         Random generator = new Random();
         int n = 10000;
         n = generator.nextInt(n);
-        String fname = "Image-" + n + ".jpg";
+        final String fname = "Image-" + n + ".jpg";
         final File file = new File(myDir, fname);
         if (file.exists())
             file.delete();
@@ -519,6 +534,18 @@ public class MapFragmnet extends Fragment implements OnMapClickListener,OnMapRea
                         outNew.close();
 
 
+                        Intent i = new Intent(getActivity(), SaveFeildActivity.class);
+                        i.putExtra("FeildImage", fname);
+                        ApplicationData.setLatLongArray(latLang);
+                        i.putExtra("LatLogArrayList", latLang.toString());
+                        startActivity(i);
+
+                        googleMap.clear();
+                        latLang = new ArrayList<LatLng>();
+                        listPoints = new ArrayList<IGeoPoint>();
+                        isGeometryClosed = false;
+
+
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -532,16 +559,7 @@ public class MapFragmnet extends Fragment implements OnMapClickListener,OnMapRea
             Toast.makeText(getActivity(), e.toString().trim(), Toast.LENGTH_SHORT).show();
         }
 
-        Intent i = new Intent(getActivity(), SaveFeildActivity.class);
-        i.putExtra("FeildImage", fname);
-        ApplicationData.setLatLongArray(latLang);
-        i.putExtra("LatLogArrayList", latLang.toString());
-        startActivity(i);
 
-        googleMap.clear();
-        latLang = new ArrayList<LatLng>();
-        listPoints = new ArrayList<IGeoPoint>();
-        isGeometryClosed = false;
     }
 
     /**
@@ -775,5 +793,26 @@ public class MapFragmnet extends Fragment implements OnMapClickListener,OnMapRea
             googleMap.animateCamera(cameraPosition);
         }
     }
+
+
+    public  boolean isStoragePermissionGranted() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (actvity.checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED) {
+                Log.v(TAG,"Permission is granted");
+                return true;
+            } else {
+
+                Log.v(TAG,"Permission is revoked");
+                ActivityCompat.requestPermissions( actvity,new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                return false;
+            }
+        }
+        else { //permission is automatically granted on sdk<23 upon installation
+            Log.v(TAG,"Permission is granted");
+            return true;
+        }
+    }
+
 
 }
