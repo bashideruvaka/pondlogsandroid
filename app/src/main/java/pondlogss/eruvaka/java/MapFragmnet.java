@@ -30,6 +30,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
+import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 
@@ -82,6 +83,7 @@ public class MapFragmnet extends Fragment implements OnMapClickListener,OnMapRea
     private GoogleMap googleMap;
     ArrayList<LatLng> latLang = new ArrayList<LatLng>();
     ArrayList<IGeoPoint> listPoints = new ArrayList<IGeoPoint>();
+    ArrayList<Polyline> polylineArrayList=new ArrayList<>();
     boolean isGeometryClosed = false;
     Polygon polygon;
     boolean isStartGeometry =false;
@@ -146,8 +148,9 @@ public class MapFragmnet extends Fragment implements OnMapClickListener,OnMapRea
                                                             int id) {
                                             // polygon.remove();
                                             googleMap.clear();
-                                            latLang = new ArrayList<LatLng>();
-                                            listPoints = new ArrayList<IGeoPoint>();
+                                            latLang.clear();;
+                                            listPoints.clear();
+                                            polylineArrayList.clear();
                                             isGeometryClosed = false;
                                         }
                                     })
@@ -337,6 +340,15 @@ public class MapFragmnet extends Fragment implements OnMapClickListener,OnMapRea
                         countPolygonPoints(latLang);
                         calculateAreaOfGPSPolygonOnEarthInSquareMeters(latLang);
                     }
+                    else if(latLang.get(latLang.size()-1).equals(marker.getPosition()))
+                    {
+                        marker.remove();
+                        Polyline polyLine=  polylineArrayList.get(polylineArrayList.size()-1);
+                        polyLine.remove();
+                        polylineArrayList.remove(polylineArrayList.size()-1);
+                        listPoints.remove(listPoints.size()-1);
+                        latLang.remove(latLang.size()-1);
+                    }
                     return false;
                 }
             });
@@ -491,14 +503,21 @@ public class MapFragmnet extends Fragment implements OnMapClickListener,OnMapRea
             googleMap.addMarker(marker);
 
             if (latLang.size() > 1) {
+
                 PolylineOptions polyLine = new PolylineOptions().color(Color.WHITE).width((float) 3.0);
                 polyLine.add(latlan);
                 LatLng previousPoint = latLang.get(latLang.size() - 2);
                 polyLine.add(previousPoint);
-                googleMap.addPolyline(polyLine);
+                Polyline mPolyLine= googleMap.addPolyline(polyLine);
+                polylineArrayList.add(mPolyLine);
+
             }
         }
     }
+
+
+
+
 
     /**
      * Save the Polygon made by user
