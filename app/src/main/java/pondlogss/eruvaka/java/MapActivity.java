@@ -129,7 +129,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         mytext.setText("Create Pond");
         bar.setDisplayHomeAsUpEnabled(true);
         bar.setIcon(android.R.color.transparent);
-
+        initilizeMap();
 
     }
 
